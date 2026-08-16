@@ -1,0 +1,1700 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MÁRIO LEVEL 110 // ANIVERSÁRIO</title>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Jersey+10&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+  :root {
+    --void: #08070c;
+    --panel: #131019;
+    --blood: #ff1100;
+    --blood-dim: #7a1108;
+    --volt: #0092ff;
+    --cult: #491f72;
+    --warn: #fff2cc;
+    --fog: #6b6478;
+    --text: #ece7f2;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--void);
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  canvas#fog {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    opacity: 0.55;
+    pointer-events: none;
+  }
+
+  .scanlines {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(0,0,0,0) 0px,
+      rgba(0,0,0,0) 2px,
+      rgba(0,0,0,0.06) 3px,
+      rgba(0,0,0,0) 4px
+    );
+    mix-blend-mode: overlay;
+  }
+
+  .vignette {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    pointer-events: none;
+    box-shadow: inset 0 0 18vw 4vw rgba(0,0,0,0.85);
+  }
+
+  /* ---------- NAV ---------- */
+
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 70;
+    display: flex;
+    justify-content: center;
+    gap: clamp(0.8rem, 3vw, 2.2rem);
+    padding: 1rem;
+    background: linear-gradient(
+      180deg,
+      rgba(8,7,12,0.95),
+      rgba(8,7,12,0)
+    );
+    backdrop-filter: blur(2px);
+  }
+
+  nav a {
+    color: var(--fog);
+    text-decoration: none;
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    transition: color 0.2s ease;
+    white-space: nowrap;
+  }
+
+  nav a:hover {
+    color: var(--warn);
+  }
+
+  /* ---------- BOTÃO DE MÚSICA ---------- */
+
+  #musicToggle {
+    position: fixed;
+    top: 0.9rem;
+    right: 1.2rem;
+    z-index: 80;
+    background: transparent;
+    border: 1px solid var(--blood-dim);
+    color: var(--warn);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.5rem 0.8rem;
+    cursor: pointer;
+  }
+
+  #musicToggle:hover {
+    border-color: var(--blood);
+  }
+
+  /* ---------- SEÇÕES ---------- */
+
+  section {
+    position: relative;
+    z-index: 5;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10vh 6vw 8vh;
+    text-align: center;
+  }
+
+  /* ---------- HERO ---------- */
+
+  #boot {
+    gap: 1.2rem;
+  }
+
+  .boot-line {
+    font-size: clamp(0.75rem, 1.6vw, 0.95rem);
+    color: var(--volt);
+    letter-spacing: 0.12em;
+    opacity: 0;
+    text-transform: uppercase;
+  }
+
+  .boot-line.show {
+    animation: typeIn 0.4s steps(1) forwards;
+  }
+
+  @keyframes typeIn {
+    to {
+      opacity: 1;
+    }
+  }
+
+  .found-title {
+    font-family: 'Jersey 10', monospace;
+    font-size: clamp(3.2rem, 13vw, 8.5rem);
+    line-height: 0.9;
+    color: var(--blood);
+    text-shadow:
+      0 0 8px rgba(255,17,0,0.65),
+      0 0 26px rgba(255,17,0,0.35),
+      3px 0 0 rgba(0,146,255,0.4),
+      -3px 0 0 rgba(73,31,114,0.4);
+    letter-spacing: 0.04em;
+    margin-top: 1.5rem;
+    opacity: 0;
+  }
+
+  .found-title.reveal {
+    animation:
+      glitchIn 0.6s ease forwards,
+      flicker 3.5s ease-in-out 0.7s infinite;
+  }
+
+  @keyframes glitchIn {
+    0% {
+      opacity: 0;
+      transform: translateX(-6px) scaleY(1.3);
+      filter: blur(4px);
+    }
+
+    30% {
+      opacity: 1;
+      transform: translateX(4px) scaleY(0.9);
+      filter: blur(1px);
+    }
+
+    50% {
+      transform: translateX(-2px) scaleY(1.05);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateX(0) scaleY(1);
+      filter: blur(0);
+    }
+  }
+
+  @keyframes flicker {
+    0%, 92%, 100% {
+      opacity: 1;
+    }
+
+    93% {
+      opacity: 0.4;
+    }
+
+    94% {
+      opacity: 1;
+    }
+
+    95% {
+      opacity: 0.55;
+    }
+
+    96% {
+      opacity: 1;
+    }
+  }
+
+  .subtitle {
+    font-size: clamp(0.85rem, 2vw, 1.1rem);
+    color: var(--fog);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-top: 1rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 1.4s;
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 5vh;
+    font-size: 0.7rem;
+    color: var(--fog);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    opacity: 0;
+    animation:
+      fadeUp 0.8s ease forwards 2.2s,
+      bob 2.2s ease-in-out 2.2s infinite;
+  }
+
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes bob {
+    0%, 100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(8px);
+    }
+  }
+
+  .section-tag {
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    color: var(--volt);
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+  }
+
+  .section-title {
+    font-family: 'Jersey 10', monospace;
+    font-size: clamp(2.2rem, 6vw, 3.4rem);
+    color: var(--warn);
+    margin-bottom: 2.5rem;
+  }
+
+  /* ---------- CHARACTER CARD ---------- */
+
+  .card {
+    background: linear-gradient(
+      180deg,
+      var(--panel),
+      #0b0912
+    );
+    border: 1px solid rgba(255,17,0,0.35);
+    box-shadow:
+      0 0 0 1px rgba(0,146,255,0.08),
+      0 20px 60px rgba(0,0,0,0.6);
+    width: min(480px, 88vw);
+    padding: 2.4rem 2rem;
+    position: relative;
+  }
+
+  .card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 1px solid var(--blood-dim);
+    pointer-events: none;
+    animation: pulse-border 2.4s ease-in-out infinite;
+  }
+
+  @keyframes pulse-border {
+    0%, 100% {
+      opacity: 0.3;
+    }
+
+    50% {
+      opacity: 0.9;
+    }
+  }
+
+  .card-name {
+    font-family: 'Jersey 10', monospace;
+    font-size: clamp(2.4rem, 7vw, 3.6rem);
+    color: var(--warn);
+    line-height: 1;
+    margin-bottom: 1.6rem;
+  }
+
+  .stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.65rem 0;
+    border-bottom: 1px dashed rgba(255,255,255,0.08);
+    font-size: 0.85rem;
+    text-align: left;
+    gap: 1rem;
+  }
+
+  .stat-row:last-child {
+    border-bottom: none;
+  }
+
+  .stat-label {
+    color: var(--fog);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+  }
+
+  .stat-value {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .stat-bar-wrap {
+    width: 44%;
+    height: 8px;
+    background: rgba(255,255,255,0.06);
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .stat-bar-fill {
+    position: absolute;
+    inset: 0;
+    width: 0%;
+    background: linear-gradient(
+      90deg,
+      var(--blood),
+      var(--warn)
+    );
+    transition:
+      width 1.6s cubic-bezier(0.2,0.8,0.2,1);
+  }
+
+  .stat-bar-fill.filled {
+    width: var(--fill);
+  }
+
+  /* ---------- LMS ---------- */
+
+  #lms {
+    padding-top: 12vh;
+  }
+
+  .lms-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.7rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .lms-tab-btn {
+    background: transparent;
+    border: 1px solid var(--fog);
+    color: var(--fog);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 0.7rem 1.1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .lms-tab-btn:hover {
+    border-color: var(--text);
+    color: var(--text);
+  }
+
+  .lms-tab-btn.active {
+    border-color: var(--tab-color, var(--blood));
+    color: var(--tab-color, var(--blood));
+    box-shadow:
+      0 0 12px
+      color-mix(
+        in srgb,
+        var(--tab-color, var(--blood)) 40%,
+        transparent
+      );
+  }
+
+  .lms-stage {
+    width: min(560px, 90vw);
+    min-height: 380px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background:
+      radial-gradient(
+        circle at 50% 20%,
+        color-mix(
+          in srgb,
+          var(--tab-color, var(--blood)) 14%,
+          transparent
+        ),
+        var(--panel) 70%
+      );
+    position: relative;
+    padding: 2.2rem 1.6rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1.2rem;
+    overflow: hidden;
+    transition: background 0.4s ease;
+  }
+
+  .lms-stage::after {
+    content: "LMS";
+    position: absolute;
+    top: 0.8rem;
+    left: 0.9rem;
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    color: var(--fog);
+  }
+
+  .lms-avatar {
+    width: 160px;
+    height: 160px;
+    margin-top: 1rem;
+    object-fit: contain;
+    filter:
+      drop-shadow(
+        0 0 10px
+        var(--tab-color, var(--blood))
+      )
+      drop-shadow(
+        0 0 22px
+        color-mix(
+          in srgb,
+          var(--tab-color, var(--blood)) 60%,
+          transparent
+        )
+      );
+    transition: filter 0.4s ease;
+  }
+
+  .lms-quote-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--tab-color, var(--blood));
+  }
+
+  .lms-quote {
+    font-family: 'Jersey 10', monospace;
+    font-size: clamp(1.5rem, 4.5vw, 2.1rem);
+    line-height: 1.25;
+    color: var(--text);
+    max-width: 26ch;
+  }
+
+  .lms-flavor {
+    font-size: 0.72rem;
+    color: var(--fog);
+    letter-spacing: 0.04em;
+    max-width: 34ch;
+    line-height: 1.5;
+  }
+
+  .lms-panel {
+    display: none;
+    animation: panelIn 0.4s ease;
+  }
+
+  .lms-panel.active {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
+  }
+
+  @keyframes panelIn {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* ---------- MEMES ---------- */
+
+  #memes {
+    padding-top: 10vh;
+  }
+
+  .meme-grid {
+    display: grid;
+    grid-template-columns:
+      repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.1rem;
+    width: min(900px, 92vw);
+  }
+
+  .meme-card {
+    background: var(--panel);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-top:
+      3px solid var(--meme-color, var(--blood));
+    padding: 1.4rem 1.2rem;
+    text-align: left;
+    position: relative;
+  }
+
+  .meme-badge {
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--meme-color, var(--blood));
+    margin-bottom: 0.7rem;
+    display: block;
+  }
+
+  .meme-emoji {
+    font-size: 1.8rem;
+    margin-bottom: 0.6rem;
+    display: block;
+  }
+
+  .meme-text {
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--text);
+  }
+
+  /* ---------- CHANT ---------- */
+
+  #chant {
+    gap: 2.5rem;
+    padding-top: 10vh;
+  }
+
+  .chant-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    color: var(--cult);
+    text-transform: uppercase;
+  }
+
+  .chant-word {
+    font-family: 'Jersey 10', monospace;
+    font-size: clamp(2.8rem, 11vw, 6rem);
+    line-height: 1;
+    position: relative;
+    color: var(--text);
+  }
+
+  .chant-word.blood {
+    color: var(--blood);
+    text-shadow:
+      0 0 18px rgba(255,17,0,0.5);
+  }
+
+  .chant-word.volt {
+    color: var(--volt);
+    text-shadow:
+      0 0 18px rgba(0,146,255,0.5);
+  }
+
+  .chant-word span {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(0.4em);
+  }
+
+  .chant-word.in-view span {
+    animation: wordUp 0.5s ease forwards;
+  }
+
+  @keyframes wordUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* ---------- FINAL ---------- */
+
+  #final {
+    gap: 1.2rem;
+    padding-top: 8vh;
+    padding-bottom: 12vh;
+  }
+
+  .final-tag {
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    color: var(--blood);
+    text-transform: uppercase;
+  }
+
+  .final-message {
+    font-family: 'Jersey 10', monospace;
+    font-size: clamp(2rem, 6vw, 4rem);
+    line-height: 1.15;
+    max-width: 15ch;
+    color: var(--warn);
+    text-shadow:
+      0 0 24px rgba(255,242,204,0.25);
+  }
+
+  .final-message .hl {
+    color: var(--blood);
+    text-shadow:
+      0 0 18px rgba(255,17,0,0.6);
+  }
+
+  .btn {
+    margin-top: 2rem;
+    background: transparent;
+    border: 1px solid var(--blood);
+    color: var(--warn);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 1rem 2rem;
+    cursor: pointer;
+    transition:
+      background 0.25s ease,
+      color 0.25s ease,
+      transform 0.1s ease;
+  }
+
+  .btn:hover {
+    background: var(--blood);
+    color: var(--void);
+  }
+
+  .btn:active {
+    transform: scale(0.97);
+  }
+
+  .footer-note {
+    margin-top: 3rem;
+    font-size: 0.7rem;
+    color: var(--fog);
+    letter-spacing: 0.15em;
+  }
+
+  canvas#confetti {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    pointer-events: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+
+  @media (max-width: 560px) {
+    nav {
+      gap: 0.7rem;
+    }
+
+    nav a {
+      font-size: 0.6rem;
+    }
+
+    #musicToggle {
+      top: 3.2rem;
+      right: 50%;
+      transform: translateX(50%);
+    }
+
+    .lms-avatar {
+      width: 120px;
+      height: 120px;
+    }
+
+    .stat-row {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .stat-bar-wrap {
+      width: 100%;
+    }
+  }
+</style>
+</head>
+
+<body>
+
+<canvas id="fog"></canvas>
+<canvas id="confetti"></canvas>
+
+<div class="scanlines"></div>
+<div class="vignette"></div>
+
+<!-- ---------- NAV ---------- -->
+
+<nav>
+  <a href="#boot">início</a>
+  <a href="#stats">ficha</a>
+  <a href="#lms">lms</a>
+  <a href="#memes">memes</a>
+  <a href="#final">mensagem</a>
+</nav>
+
+<!-- ---------- MÚSICA ---------- -->
+
+<button id="musicToggle">
+  ▶ tocar lms
+</button>
+
+<audio
+  id="bgMusic"
+  src="./musica/Plead.mp3"
+  loop
+  preload="metadata">
+</audio>
+
+<!-- ---------- HERO ---------- -->
+
+<section id="boot">
+
+  <div id="bootlines"></div>
+
+  <h1 class="found-title" id="foundTitle">
+    MÁRIO<br>
+    LEVEL UP
+  </h1>
+
+  <p class="subtitle">
+    16.08 — novo nível desbloqueado, lvl 15
+  </p>
+
+  <div class="scroll-hint">
+    role para continuar ↓
+  </div>
+
+</section>
+
+<!-- ---------- FICHA ---------- -->
+
+<section id="stats">
+
+  <p class="section-tag">
+    arquivo do void
+  </p>
+
+  <h2 class="section-title">
+    Ficha do Sobrevivente
+  </h2>
+
+  <div class="card">
+
+    <div class="card-name">
+      MÁRIO
+    </div>
+
+    <div class="stat-row">
+      <span class="stat-label">
+        bobeira
+      </span>
+
+      <span class="stat-bar-wrap">
+        <span
+          class="stat-bar-fill"
+          style="--fill:97%">
+        </span>
+      </span>
+    </div>
+
+    <div class="stat-row">
+      <span class="stat-label">
+        nível de irmão
+      </span>
+
+      <span class="stat-bar-wrap">
+        <span
+          class="stat-bar-fill"
+          style="--fill:100%">
+        </span>
+      </span>
+    </div>
+
+    <div class="stat-row">
+      <span class="stat-label">
+        chance de sobreviver ao próprio aniversário
+      </span>
+
+      <span class="stat-bar-wrap">
+        <span
+          class="stat-bar-fill"
+          style="--fill:100%">
+        </span>
+      </span>
+    </div>
+
+    <div class="stat-row">
+      <span class="stat-label">
+        status
+      </span>
+
+      <span
+        class="stat-value"
+        style="color:var(--volt)">
+        AMADO POR GERAL
+      </span>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ---------- LMS ---------- -->
+
+<section id="lms">
+
+  <p class="section-tag">
+    extração especial
+  </p>
+
+  <h2 class="section-title">
+    Veja os personagens
+  </h2>
+
+  <div class="lms-tabs">
+
+    <button
+      class="lms-tab-btn active"
+      data-target="lms-coolkid"
+      style="--tab-color:#ff2d55">
+      Coolkid
+    </button>
+
+    <button
+      class="lms-tab-btn"
+      data-target="lms-007"
+      style="--tab-color:#0092ff">
+      007
+    </button>
+
+  </div>
+
+  <div
+    class="lms-stage"
+    id="lmsStage"
+    style="--tab-color:#ff2d55">
+
+    <div
+      class="lms-panel active"
+      id="lms-coolkid">
+
+      <img
+        class="lms-avatar"
+        src="./personagens/coolkid.png"
+        alt="Skin Coolkid"
+        loading="lazy">
+
+      <div class="lms-quote-label">
+        sistema comprometido
+      </div>
+
+      <div class="lms-quote">
+        "FESTA.EXE RODANDO EM LOOP INFINITO."
+      </div>
+
+      <div class="lms-flavor">
+        Ele invadiu o console só pra garantir que ninguém
+        cancele o parabéns pro Mário. Hoje nem o caos mexe nisso.
+      </div>
+
+    </div>
+
+    <div
+      class="lms-panel"
+      id="lms-007">
+
+     <img class="lms-avatar" src="./personagens/007.jpeg" alt="Skin 007" loading="lazy">
+        alt="Skin 007"
+        loading="lazy">
+
+      <div class="lms-quote-label">
+        acesso concedido
+      </div>
+
+      <div class="lms-quote">
+        "NÍVEL MÁXIMO DE FESTA LIBERADO."
+      </div>
+
+      <div class="lms-flavor">
+        Rumor entre os servidores diz que ele só aparece
+        quando alguém merece mesmo ser celebrado.
+        Hoje é a vez do Mário.
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ---------- MEMES ---------- -->
+
+<section id="memes">
+
+  <p class="section-tag">
+    arquivos vazados
+  </p>
+
+  <h2 class="section-title">
+    Eita 🔥
+  </h2>
+
+  <div class="meme-grid">
+
+    <div
+      class="meme-card"
+      style="--meme-color:#ff1100">
+
+      <span class="meme-badge">
+        conquista desbloqueada
+      </span>
+
+      <span class="meme-emoji">
+        🏆
+      </span>
+
+      <p class="meme-text">
+        Sobreviveu a mais um ano sendo o irmão
+        mais bobão do lobby.
+      </p>
+
+    </div>
+
+    <div
+      class="meme-card"
+      style="--meme-color:#0092ff">
+
+      <span class="meme-badge">
+        alerta do sistema
+      </span>
+
+      <span class="meme-emoji">
+        ⚠️
+      </span>
+
+      <p class="meme-text">
+        Bobagem detectada, os cara não para man
+      </p>
+
+    </div>
+
+    <div
+      class="meme-card"
+      style="--meme-color:#491f72">
+
+      <span class="meme-badge">
+        estatística oficial
+      </span>
+
+      <span class="meme-emoji">
+        📊
+      </span>
+
+      <p class="meme-text">
+        103% de rage quit, mal perde e já dá rage, grr
+      </p>
+
+    </div>
+
+    <div
+      class="meme-card"
+      style="--meme-color:#11a100">
+
+      <span class="meme-badge">
+        rumor do void
+      </span>
+
+      <span class="meme-emoji">
+        👻
+      </span>
+
+      <p class="meme-text">
+        Dizem que até o killer do lobby dá boa sorte
+        pro Mário hoje. Só hoje... I'm fire jason
+      </p>
+
+    </div>
+
+    <div
+      class="meme-card"
+      style="--meme-color:#fff2cc">
+
+      <span class="meme-badge">
+        missão diária
+      </span>
+
+      <span class="meme-emoji">
+        🎂
+      </span>
+
+      <p class="meme-text">
+        Objetivo: comer bolo antes que alguém grite
+        "Niggaaaa!" e estrague o clima.
+      </p>
+
+    </div>
+
+    <div
+      class="meme-card"
+      style="--meme-color:#ff2d55">
+
+      <span class="meme-badge">
+        easter egg
+      </span>
+
+      <span class="meme-emoji">
+        🎮
+      </span>
+
+      <p class="meme-text">
+        Se ele disser "só mais uma partida" hoje também,
+        isso conta como crime de aniversário.
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ---------- CHANT ---------- -->
+
+<section id="chant">
+
+  <div class="chant-label">
+    transmissão detectada
+  </div>
+
+  <div
+    class="chant-word blood"
+    data-text="bobão">
+    bobão
+  </div>
+
+  <div
+    class="chant-word volt"
+    data-text="irmão">
+    irmão
+  </div>
+
+</section>
+
+<!-- ---------- FINAL ---------- -->
+
+<section id="final">
+
+  <div class="final-tag">
+    // Não vai fugir não
+  </div>
+
+  <p class="final-message">
+    <span class="hl">Mário</span>,
+    você é o
+    <span class="hl">irmão</span>
+    mais especial e
+    <span class="hl">bobão</span>
+    que conheço.
+  </p>
+
+  <button
+    class="btn"
+    id="celebrate">
+    feliz aniversário
+  </button>
+
+  <p class="footer-note">
+    te amo, seu bobão. — De vivi, seu irmão
+  </p>
+
+</section>
+
+<script>
+
+  /* =====================================================
+     BOOT SEQUENCE
+  ===================================================== */
+
+  const bootLines = [
+    "> iniciando protocolo de aniversário...",
+    "> escaneando o servidor...",
+    "> jogador detectado: MÁRIO",
+    "> status: LEVEL UP CONFIRMADO"
+  ];
+
+  const bootWrap = document.getElementById('bootlines');
+
+  bootLines.forEach((line, i) => {
+
+    const el = document.createElement('div');
+
+    el.className = 'boot-line';
+    el.textContent = line;
+
+    bootWrap.appendChild(el);
+
+    setTimeout(() => {
+      el.classList.add('show');
+    }, 250 + i * 380);
+
+  });
+
+  setTimeout(() => {
+
+    document
+      .getElementById('foundTitle')
+      .classList
+      .add('reveal');
+
+  }, 250 + bootLines.length * 380 + 200);
+
+
+  /* =====================================================
+     FOG / PARTICLES
+  ===================================================== */
+
+  const fogCanvas = document.getElementById('fog');
+  const fctx = fogCanvas.getContext('2d');
+
+  let w;
+  let h;
+  let particles = [];
+
+  function resizeFog() {
+
+    w = fogCanvas.width = window.innerWidth;
+    h = fogCanvas.height = document.body.scrollHeight;
+
+  }
+
+  function initParticles() {
+
+    particles = [];
+
+    const count = Math.floor((w * h) / 60000);
+
+    for (let i = 0; i < count; i++) {
+
+      particles.push({
+
+        x: Math.random() * w,
+        y: Math.random() * h,
+
+        r: Math.random() * 1.6 + 0.4,
+
+        vy: -(Math.random() * 0.25 + 0.05),
+
+        vx: (Math.random() - 0.5) * 0.15,
+
+        hue:
+          Math.random() > 0.5
+            ? 'rgba(255,17,0,'
+            : 'rgba(0,146,255,',
+
+        a: Math.random() * 0.5 + 0.1
+
+      });
+
+    }
+
+  }
+
+  function animateFog() {
+
+    fctx.clearRect(0, 0, w, h);
+
+    particles.forEach(p => {
+
+      p.y += p.vy;
+      p.x += p.vx;
+
+      if (p.y < -10) {
+        p.y = h + 10;
+      }
+
+      if (p.x < -10) {
+        p.x = w + 10;
+      }
+
+      if (p.x > w + 10) {
+        p.x = -10;
+      }
+
+      fctx.beginPath();
+
+      fctx.arc(
+        p.x,
+        p.y,
+        p.r,
+        0,
+        Math.PI * 2
+      );
+
+      fctx.fillStyle = p.hue + p.a + ')';
+
+      fctx.fill();
+
+    });
+
+    requestAnimationFrame(animateFog);
+
+  }
+
+  resizeFog();
+  initParticles();
+  animateFog();
+
+  window.addEventListener('resize', () => {
+
+    resizeFog();
+    initParticles();
+
+  });
+
+
+  /* =====================================================
+     STAT BARS
+  ===================================================== */
+
+  const statObserver = new IntersectionObserver(
+    entries => {
+
+      entries.forEach(entry => {
+
+        if (entry.isIntersecting) {
+
+          document
+            .querySelectorAll('.stat-bar-fill')
+            .forEach(el => {
+
+              el.classList.add('filled');
+
+            });
+
+        }
+
+      });
+
+    },
+    {
+      threshold: 0.4
+    }
+  );
+
+  statObserver.observe(
+    document.getElementById('stats')
+  );
+
+
+  /* =====================================================
+     LMS TABS
+  ===================================================== */
+
+  const lmsButtons =
+    document.querySelectorAll('.lms-tab-btn');
+
+  const lmsStage =
+    document.getElementById('lmsStage');
+
+  lmsButtons.forEach(btn => {
+
+    btn.addEventListener('click', () => {
+
+      lmsButtons.forEach(b => {
+        b.classList.remove('active');
+      });
+
+      btn.classList.add('active');
+
+      document
+        .querySelectorAll('.lms-panel')
+        .forEach(panel => {
+          panel.classList.remove('active');
+        });
+
+      const target =
+        document.getElementById(
+          btn.dataset.target
+        );
+
+      target.classList.add('active');
+
+      const color =
+        getComputedStyle(btn)
+          .getPropertyValue('--tab-color')
+          .trim();
+
+      lmsStage.style.setProperty(
+        '--tab-color',
+        color
+      );
+
+    });
+
+  });
+
+
+  /* =====================================================
+     CHANT
+  ===================================================== */
+
+  document
+    .querySelectorAll('.chant-word')
+    .forEach(word => {
+
+      const text = word.dataset.text;
+
+      word.innerHTML = '';
+
+      [...text].forEach((ch, i) => {
+
+        const span =
+          document.createElement('span');
+
+        span.textContent = ch;
+
+        span.style.animationDelay =
+          (i * 0.05) + 's';
+
+        word.appendChild(span);
+
+      });
+
+    });
+
+
+  const chantObserver =
+    new IntersectionObserver(
+      entries => {
+
+        entries.forEach(entry => {
+
+          if (entry.isIntersecting) {
+
+            entry.target
+              .classList
+              .add('in-view');
+
+          }
+
+        });
+
+      },
+      {
+        threshold: 0.6
+      }
+    );
+
+
+  document
+    .querySelectorAll('.chant-word')
+    .forEach(word => {
+
+      chantObserver.observe(word);
+
+    });
+
+
+  /* =====================================================
+     CONFETTI
+  ===================================================== */
+
+  const confettiCanvas =
+    document.getElementById('confetti');
+
+  const cctx =
+    confettiCanvas.getContext('2d');
+
+  function resizeConfetti() {
+
+    confettiCanvas.width =
+      window.innerWidth;
+
+    confettiCanvas.height =
+      window.innerHeight;
+
+  }
+
+  resizeConfetti();
+
+  window.addEventListener(
+    'resize',
+    resizeConfetti
+  );
+
+
+  const colors = [
+    '#ff1100',
+    '#0092ff',
+    '#491f72',
+    '#fff2cc',
+    '#ece7f2'
+  ];
+
+
+  function burstConfetti() {
+
+    const pieces = [];
+
+    const cx =
+      window.innerWidth / 2;
+
+    const cy =
+      window.innerHeight / 2;
+
+
+    for (let i = 0; i < 160; i++) {
+
+      const angle =
+        Math.random() * Math.PI * 2;
+
+      const speed =
+        Math.random() * 9 + 3;
+
+      pieces.push({
+
+        x: cx,
+        y: cy,
+
+        vx:
+          Math.cos(angle) * speed,
+
+        vy:
+          Math.sin(angle) * speed - 3,
+
+        size:
+          Math.random() * 6 + 3,
+
+        color:
+          colors[
+            Math.floor(
+              Math.random() * colors.length
+            )
+          ],
+
+        rot:
+          Math.random() * 360,
+
+        vr:
+          (Math.random() - 0.5) * 12,
+
+        life: 0
+
+      });
+
+    }
+
+
+    let frame = 0;
+
+
+    function step() {
+
+      cctx.clearRect(
+        0,
+        0,
+        confettiCanvas.width,
+        confettiCanvas.height
+      );
+
+      frame++;
+
+      let alive = false;
+
+
+      pieces.forEach(p => {
+
+        p.vy += 0.18;
+
+        p.x += p.vx;
+        p.y += p.vy;
+
+        p.rot += p.vr;
+        p.life++;
+
+
+        if (
+          p.y <
+          confettiCanvas.height + 20
+        ) {
+
+          alive = true;
+
+        }
+
+
+        cctx.save();
+
+        cctx.translate(
+          p.x,
+          p.y
+        );
+
+        cctx.rotate(
+          p.rot * Math.PI / 180
+        );
+
+        cctx.fillStyle =
+          p.color;
+
+        cctx.globalAlpha =
+          Math.max(
+            0,
+            1 - p.life / 140
+          );
+
+
+        cctx.fillRect(
+          -p.size / 2,
+          -p.size / 4,
+          p.size,
+          p.size / 2
+        );
+
+        cctx.restore();
+
+      });
+
+
+      if (
+        alive &&
+        frame < 200
+      ) {
+
+        requestAnimationFrame(step);
+
+      } else {
+
+        cctx.clearRect(
+          0,
+          0,
+          confettiCanvas.width,
+          confettiCanvas.height
+        );
+
+      }
+
+    }
+
+    step();
+
+  }
+
+
+  document
+    .getElementById('celebrate')
+    .addEventListener(
+      'click',
+      burstConfetti
+    );
+
+
+  /* =====================================================
+     TRILHA SONORA
+  ===================================================== */
+
+  const bgMusic =
+    document.getElementById('bgMusic');
+
+  const musicBtn =
+    document.getElementById('musicToggle');
+
+  bgMusic.volume = 0.45;
+  bgMusic.loop = true;
+
+
+  musicBtn.addEventListener(
+    'click',
+    async () => {
+
+      try {
+
+        if (bgMusic.paused) {
+
+          await bgMusic.play();
+
+          musicBtn.textContent =
+            '■ parar música';
+
+          musicBtn.setAttribute(
+            'aria-label',
+            'Parar música'
+          );
+
+        } else {
+
+          bgMusic.pause();
+
+          musicBtn.textContent =
+            '▶ tocar trilha';
+
+          musicBtn.setAttribute(
+            'aria-label',
+            'Tocar música'
+          );
+
+        }
+
+      } catch (error) {
+
+        console.error(
+          'ERRO AO TOCAR O ÁUDIO:',
+          error
+        );
+
+        alert(
+          'Não foi possível tocar a música. ' +
+          'Verifique se o arquivo "Plead.mp3" ' +
+          'está dentro da pasta "musica".'
+        );
+
+      }
+
+    }
+  );
+
+
+  /* =====================================================
+     TRATAMENTO DE ERRO DO ÁUDIO
+  ===================================================== */
+
+  bgMusic.addEventListener(
+    'error',
+    () => {
+
+      console.error(
+        'O arquivo Plead.mp3 não foi encontrado ou não pôde ser carregado.'
+      );
+
+    }
+  );
+
+</script>
+
+</body>
+</html>
